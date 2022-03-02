@@ -1,7 +1,7 @@
 <template>
   <section class="the">
     <div class="container1">
-      <div v-for="product in products" :key="product._id" class="product">
+      <div v-for="product of content" :key="product.id" class="product">
         <div class="card">
           <div class="content">
             <ul class="sci">
@@ -48,26 +48,73 @@
           </div>
         </div>
       </div>
+      <button
+        id="submit-btn"
+        class="btn btn-mod btn-border btn-large"
+        @click="toggleModal"
+      >
+        ADD A PRODUCTS
+      </button>
+      <Modal @clicked="toggleModal" v-if="showModal" />
     </div>
   </section>
 </template>
 
 <script>
+import Modal from "../components/Modal.vue";
+import UserService from "../services/user.service";
 export default {
+  components: { Modal },
   name: "products",
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+  },
   data() {
     return {
-      products: [],
+      content: "",
+      showModal: false,
     };
+  },
+  methods: {
+    toggleModal() {
+      this.showModal = !this.showModal;
+    },
+    deleteProduct(product) {
+      this.loading = true;
+      this.$store.dispatch("product/delete", product).then(
+        () => {
+          location.reload();
+        },
+        (error) => {
+          this.loading = false;
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
   },
 
   mounted() {
-    fetch("https://pointos-backend.herokuapp.com/products")
-      .then((res) => res.json())
-      .then((data) => (this.products = data))
-      .catch((err) => concole.log(err.message));
+    UserService.getPublicContent().then(
+      (response) => {
+        this.content = response.data;
+      },
+      (error) => {
+        this.content =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+      }
+    );
   },
-  methods: {},
 };
 </script>
 

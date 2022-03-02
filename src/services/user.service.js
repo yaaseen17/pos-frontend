@@ -3,7 +3,7 @@ import authHeader from "./auth-header";
 const API_URL = "https://pointos-backend.herokuapp.com/products";
 class UserService {
   getPublicContent() {
-    return axios.get(API_URL);
+    return axios.get(API_URL, { headers: authHeader() });
   }
 }
 export default new UserService();
