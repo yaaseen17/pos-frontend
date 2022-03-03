@@ -19,11 +19,12 @@ class ProductService {
   }
   update(product) {
     return axios.patch(
-      API_URL + product._id,
+      API_URL + product_id,
       {
         name: product.name,
         description: product.description,
         img: product.img,
+        price: product.price,
       },
       { headers: authHeader() }
     );

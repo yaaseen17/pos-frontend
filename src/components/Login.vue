@@ -109,7 +109,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .form-bg {
   background: #00b4ef;
   margin-top: 100px;

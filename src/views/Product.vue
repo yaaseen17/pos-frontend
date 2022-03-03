@@ -1,5 +1,6 @@
 <template>
   <section class="the">
+    <h1>Lets Sell or Buy</h1>
     <div class="container1">
       <div v-for="product of content" :key="product.id" class="product">
         <div class="card">
@@ -28,17 +29,18 @@
                 </div>
                 <div class="d-flex justify-content-end card-footer">
                   <button
+                    id="edit"
                     type="button"
                     class="btn btn-warning w-50"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editProduct${position}"
+                    @click="toggleModal2"
                   >
                     Edit
                   </button>
                   <button
+                    id="delete"
                     type="button"
                     class="btn btn-danger w-70 ms-3"
-                    onclick="deleteProduct(${position})"
+                    @click="deleteProduct(product._id)"
                   >
                     Delete
                   </button>
@@ -56,6 +58,11 @@
         ADD A PRODUCTS
       </button>
       <Modal @clicked="toggleModal" v-if="showModal" />
+      <Updatemodal
+        :updateContent="updateContent"
+        @clicked="toggleModal2"
+        v-if="showModal2"
+      />
     </div>
   </section>
 </template>
@@ -63,8 +70,9 @@
 <script>
 import Modal from "../components/Modal.vue";
 import UserService from "../services/user.service";
+import Updatemodal from "../components/Updatemodal.vue";
 export default {
-  components: { Modal },
+  components: { Modal, Updatemodal },
   name: "products",
   computed: {
     currentUser() {
@@ -75,11 +83,20 @@ export default {
     return {
       content: "",
       showModal: false,
+      showModal2: false,
+      UpdateContent: "",
     };
   },
   methods: {
     toggleModal() {
       this.showModal = !this.showModal;
+    },
+    toggleModal2() {
+      this.showModal2 = !this.showModal2;
+    },
+    changeUpdater(i) {
+      this.UpdateContent = this.content.products[i];
+      this.showModal2 = !this.showModal2;
     },
     deleteProduct(product) {
       this.loading = true;
@@ -101,6 +118,7 @@ export default {
   },
 
   mounted() {
+    this.loading = true;
     UserService.getPublicContent().then(
       (response) => {
         this.content = response.data;
@@ -119,6 +137,9 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
 img {
   height: 150px;
   width: 150px;
