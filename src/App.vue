@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <nav class="navbar navbar-expand bg-primary">
       <a href="/" class="navbar-brand">bezKoder</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -13,21 +13,6 @@
             <font-awesome-icon icon="home" /> Products
           </router-link>
         </li>
-        <li v-if="showAdminBoard" class="nav-item">
-          <router-link to="/principal" class="nav-link"
-            >Admin Board</router-link
-          >
-        </li>
-        <li v-if="showModeratorBoard" class="nav-item">
-          <router-link to="/teacher" class="nav-link"
-            >Moderator Board</router-link
-          >
-        </li>
-        <li class="nav-item">
-          <router-link v-if="currentUser" to="/student" class="nav-link"
-            >User</router-link
-          >
-        </li>
       </div>
       <div v-if="!currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">
@@ -35,6 +20,7 @@
             <font-awesome-icon icon="user-plus" /> Sign Up
           </router-link>
         </li>
+
         <li class="nav-item">
           <router-link to="/login" class="nav-link">
             <font-awesome-icon icon="sign-in-alt" /> Login
@@ -42,6 +28,11 @@
         </li>
       </div>
       <div v-if="currentUser" class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <router-link to="/Cart" class="nav-link">
+            <font-awesome-icon icon="user-plus" /> cart
+          </router-link>
+        </li>
         <li class="nav-item">
           <router-link to="/profile" class="nav-link">
             <font-awesome-icon icon="user" />
@@ -75,3 +66,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.nav-link {
+  color: black;
+}
+</style>

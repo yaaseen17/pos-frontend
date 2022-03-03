@@ -3,6 +3,7 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import Product from "./views/Product.vue";
+import Cart from "./views/Cart.vue";
 // lazy-loaded
 const Profile = () => import("./components/Profile.vue");
 const routes = [
@@ -33,6 +34,12 @@ const routes = [
     name: "profile",
     // lazy-loaded
     component: Profile,
+  },
+  {
+    path: "/Cart",
+    name: "Cart",
+    // lazy-loaded
+    component: Cart,
   },
 ];
 const router = createRouter({

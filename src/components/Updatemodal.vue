@@ -1,7 +1,7 @@
 <template>
-  <div class="bruh" @click.self="toggleModal2">
+  <div class="upd" @click.self="toggleModal">
     <div class="card">
-      <Form @submit="updatedProduct" :validation-schema="schema">
+      <Form @submit="updateProduct" :validation-schema="schema">
         <div class="form-group">
           <label for="name" style="padding-top: 13px">title</label>
           <Field
@@ -17,7 +17,7 @@
           <label for="description" style="padding-top: 13px">description</label>
           <Field
             name="description"
-            type="description"
+            type="text"
             class="form-content"
             :value="updateContent.description"
           />
@@ -28,7 +28,7 @@
           <label for="img" style="padding-top: 13px">img</label>
           <Field
             name="img"
-            type="img"
+            type="text"
             class="form-content"
             :value="updateContent.img"
           />
@@ -39,7 +39,7 @@
           <label for="price" style="padding-top: 13px">price</label>
           <Field
             name="price"
-            type="price"
+            type="text"
             class="form-content"
             :value="updateContent.price"
           />
@@ -50,14 +50,13 @@
           <button
             id="submit-btn"
             class="btn btn-primary btn-block"
-            @click="updateProduct(product)"
             :disabled="loading"
           >
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
             ></span>
-            <span>Add Product</span>
+            <span>Update</span>
           </button>
         </div>
         <div class="form-group">
@@ -91,11 +90,11 @@ export default {
       loading: false,
       message: "",
       schema,
-      showModal2: false,
+      showModal: false,
     };
   },
   methods: {
-    toggleModal2() {
+    toggleModal() {
       this.$emit("clicked");
     },
     updateProduct(product) {
@@ -120,4 +119,22 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.upd {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+}
+.form-content {
+  width: 100%;
+}
+.upd .card {
+  height: fit-content;
+  padding: 2rem;
+  margin: 0 auto;
+}
+</style>

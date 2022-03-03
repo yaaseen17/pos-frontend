@@ -2,7 +2,7 @@
   <div class="form-bg">
     <div class="container">
       <div class="row">
-        <div class="col-md-offset-3 col-md-6">
+        <div >
           <Form
             @submit="handleLogin"
             :validation-schema="schema"
@@ -112,9 +112,10 @@ export default {
 <style scoped>
 .form-bg {
   background: #00b4ef;
-  margin-top: 100px;
+  margin: 100px auto;
   padding: 20px;
   border-radius: 10%;
+  width: fit-content;
 }
 .form-horizontal {
   background: #fff;

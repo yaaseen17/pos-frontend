@@ -1,8 +1,12 @@
 <template>
   <section class="the">
     <h1>Lets Sell or Buy</h1>
+    <br />
+    <button id="submit-btn" class="addp" @click="toggleModal">
+      ADD A PRODUCTS
+    </button>
     <div class="container1">
-      <div v-for="product of content" :key="product.id" class="product">
+      <div v-for="(product, i) in content" :key="product.id" class="product">
         <div class="card">
           <div class="content">
             <ul class="sci">
@@ -17,15 +21,8 @@
                     class="form-control"
                     value="1"
                     min="1"
-                    id="addToCart${position}"
+                    :id="`qty${i}`"
                   />
-                  <button
-                    type="button"
-                    class="btn btn-secondary ms-3"
-                    onclick="addToCart(${position})"
-                  >
-                    <i class="fas fa-cart-plus"></i>
-                  </button>
                 </div>
                 <div class="d-flex justify-content-end card-footer">
                   <button
@@ -36,6 +33,7 @@
                   >
                     Edit
                   </button>
+
                   <button
                     id="delete"
                     type="button"
@@ -44,19 +42,33 @@
                   >
                     Delete
                   </button>
+                  <div class="access">
+                    <button
+                      class="btn"
+                      @click="addToCart(product, i)"
+                      style="font-size: 25px"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="26"
+                        height="26"
+                        fill="currentColor"
+                        class="bi bi-cart"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </ul>
           </div>
         </div>
       </div>
-      <button
-        id="submit-btn"
-        class="btn btn-mod btn-border btn-large"
-        @click="toggleModal"
-      >
-        ADD A PRODUCTS
-      </button>
+
       <Modal @clicked="toggleModal" v-if="showModal" />
       <Updatemodal
         :updateContent="updateContent"
@@ -73,7 +85,7 @@ import UserService from "../services/user.service";
 import Updatemodal from "../components/Updatemodal.vue";
 export default {
   components: { Modal, Updatemodal },
-  name: "products",
+  name: "Products",
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -95,7 +107,7 @@ export default {
       this.showModal2 = !this.showModal2;
     },
     changeUpdater(i) {
-      this.UpdateContent = this.content.products[i];
+      this.updateContent = this.content[i];
       this.showModal2 = !this.showModal2;
     },
     deleteProduct(product) {
@@ -114,6 +126,26 @@ export default {
             error.toString();
         }
       );
+    },
+    addToCart(product, i) {
+      let qty = document.querySelector(`#qty${i}`).value;
+      fetch("https://pointos-backend.herokuapp.com/cart/" + product._id, {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + JSON.parse(localStorage.getItem("user")).accessToken,
+        },
+        body: JSON.stringify({ qty: parseInt(qty) }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          localStorage.setItem("user", JSON.stringify(data));
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     },
   },
 
@@ -236,7 +268,14 @@ img {
   transition: 0.5s;
   opacity: 0;
 }
-
+.addp {
+  width: fit-content;
+  border: 2px solid #00b4ef;
+  border-radius: 10px;
+  margin-left: 10%;
+  background-color: #00b4ef;
+  font-weight: 500;
+}
 .container1 .card:hover .sci li {
   transform: translateY(0px);
   opacity: 1;
